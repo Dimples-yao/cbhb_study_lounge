@@ -9,6 +9,7 @@
 
 # Mobile Tools for Java (J2ME)
 .idea/
+./targe
 
 # 二进制文件
 bin
@@ -16,7 +17,7 @@ bin
 # Package Files #
 *.jar
 *.war
-*.nar
+*.nair
 *.ear
 *.zip
 *.tar.gz
