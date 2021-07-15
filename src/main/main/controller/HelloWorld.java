@@ -1,9 +1,7 @@
 package controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @date 2019-03-31
@@ -11,8 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HelloWorld {
 
-    @RequestMapping(path="/hello", method= RequestMethod.GET)
-    public @ResponseBody String helloWorld() {
-        return "hello world!";
+    @RequestMapping(path = "/hello/{id}", method = RequestMethod.GET)
+    public @ResponseBody
+    String helloWorld(@PathVariable("id") String id) {
+        return id;
     }
 }
