@@ -1,6 +1,6 @@
 package controller;
 
-import model.User;
+import dao.UserDao;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,14 +12,16 @@ import java.util.Map;
 @Controller
 public class JSONController {
 
+/*
     @RequestMapping("/testJavaBean")
     @ResponseBody
-    public User test(@RequestParam("name") String name) {
-        User user = new User();
+    public UserDao test(@RequestParam("name") String name) {
+        UserDao user = new UserDao();
         user.setUserName(name);
         user.setPassword("123456");
         return user;
     }
+*/
 
 
     @RequestMapping("/testMap")
