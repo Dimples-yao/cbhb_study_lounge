@@ -19,6 +19,12 @@
 
 ## 二 项目部署
 
+#### 配置git
+
+1. 本地配置GitHub环境
+2. 将该项目克隆到本地
+3. 切换本地分支,开发分支一般命名为`dev_**`
+
 #### MySQL初始化
 
 建表语句
@@ -51,7 +57,7 @@ VALUES
 
 1. 修改jdbc.properties,改为自己数据库的地址
 2. 配置Tomcat启动
-3. 在浏览器中输入`http://localhost:8080/cbhb_study_lounge/user/all`,若能看到用户数据,则表示启动成功.数据内容如下
+3. 在浏览器中输入`http://localhost:8080/cbhb_study_lounge/user/all `,若能看到用户数据,则表示启动成功.数据内容如下
 ```json
 [
   {
