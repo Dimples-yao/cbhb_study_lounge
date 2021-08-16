@@ -23,10 +23,10 @@
 
     <update id="updateUser" parameterType="User">
         UPDATE User
-        SET name          = #{Name},
-            sex           = #{Sex},
-            phone         = #{Phone},
-            password      = #{Password},
+        SET name           = #{Name},
+            sex            = #{Sex},
+            phone          = #{Phone},
+            password       = #{Password},
             cultural_level = #{CulturalLevel}
         WHERE id = #{Id}
     </update>
