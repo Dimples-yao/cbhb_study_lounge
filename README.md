@@ -29,7 +29,7 @@
 
 建表语句
 
-```mysql
+```sql
 CREATE TABLE `user` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '姓名',
@@ -41,12 +41,12 @@ CREATE TABLE `user` (
   `mtime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录更新时间',
   PRIMARY KEY (`id`),
   KEY `idx_phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户基础信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户基础信息表';
 ```
 
 添加数据语句
 
-```mysql
+```sql
 INSERT INTO `user` (`name`, `sex`, `phone`, `password`, `cultural_level`)
 VALUES
 	('张三', 0, '13731650211', '123456', 7),
