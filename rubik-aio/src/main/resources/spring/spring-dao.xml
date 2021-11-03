@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 配置整合mybatis过程 -->
+    <!-- 1.配置数据库相关参数properties的属性：${url} -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <context:property-placeholder location="classpath:redis.properties"/>
+
+    <!-- 2.数据库连接池 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!-- 配置连接池属性 -->
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <!-- c3p0连接池的私有属性 -->
+        <property name="maxPoolSize" value="30"/>
+        <property name="minPoolSize" value="10"/>
+        <!-- 关闭连接后不自动commit -->
+        <property name="autoCommitOnClose" value="false"/>
+        <!-- 获取连接超时时间 -->
+        <property name="checkoutTimeout" value="10000"/>
+        <!-- 当获取连接失败重试次数 -->
+        <property name="acquireRetryAttempts" value="2"/>
+    </bean>
+
+    <!-- 3.配置SqlSessionFactory对象 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 注入数据库连接池 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 配置MyBaties全局配置文件:mybatis-config.xml -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- 扫描pojo包 使用别名 -->
+        <property name="typeAliasesPackage" value="pojo"/>
+        <!-- 扫描sql配置文件:mapper需要的xml文件 -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+
+    <!-- 4.配置扫描Dao接口包，动态实现Dao接口，注入到spring容器中 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 注入sqlSessionFactory -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!-- 给出需要扫描Dao接口包 -->
+        <property name="basePackage" value="dao"/>
+    </bean>
+
+    <!--5.配置redis-->
+    <!-- 1、配置连接池信息 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!-- 最大连接数-->
+        <property name="maxTotal" value="50"/>
+        <property name="maxIdle" value="5"/>
+        <!-- 这里只是Spring整合Redis测试，配两个做个样子就得了-->
+    </bean>
+    <!--2、spring整合Jedis（Redis） 也就是配置连接工厂JedisConnectionFactory-->
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <!--需要自定义（指定）一些工厂属性配置信息-->
+        <!--        指定服务器地址-->
+        <property name="hostName" value="127.0.0.1"/>
+        <!--        指定服务端口号-->
+        <property name="port" value="6379"/>
+        <!--        指定密码（Redis3之前可以不指定，之后都要）-->
+        <property name="password" value="NI4zhidao"/>
+        <!--   自定义连接池配置：再把第一步配置好的连接池信息通过属性注入进来  如果不自定义会采用默认的连接池配置，工厂中有属性new JedisPoolConfig-->
+        <property name="poolConfig" ref="jedisPoolConfig"/>
+    </bean>
+    <!--2、spring整合Jedis（Redis） 也就是配置连接工厂JedisConnectionFactory-->
+    <bean id="jedisConnectionFactory1" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <!--需要自定义（指定）一些工厂属性配置信息-->
+        <!--        指定服务器地址-->
+        <property name="hostName" value="127.0.0.1"/>
+        <!--        指定服务端口号-->
+        <property name="port" value="6379"/>
+        <!--        指定密码（Redis3之前可以不指定，之后都要）-->
+        <property name="password" value="NI4zhidao"/>
+        <!--   自定义连接池配置：再把第一步配置好的连接池信息通过属性注入进来  如果不自定义会采用默认的连接池配置，工厂中有属性new JedisPoolConfig-->
+        <property name="poolConfig" ref="jedisPoolConfig"/>
+    </bean>
+    <!--    3、配置RedisTemplate模板   把第二步配置好的连接工厂JedisConnectionFactory通过属性注入到RedisTemplate模板中-->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFactory"/>
+        <!--如下配置是为了之后的key和value的序列化操作，暂时不配制也是OK的-->
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+    </bean>
+
+    <!--    3、配置RedisTemplate模板   把第二步配置好的连接工厂JedisConnectionFactory通过属性注入到RedisTemplate模板中-->
+    <bean id="redisTemplate1" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFactory1"/>
+        <!--如下配置是为了之后的key和value的序列化操作，暂时不配制也是OK的-->
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+    </bean>
+
+
+</beans>
